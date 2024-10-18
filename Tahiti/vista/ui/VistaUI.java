@@ -3,14 +3,21 @@
 //Vers: 1.0
 //File: VistaUI.java
 package vista.ui;
+
+import space.nucleus.MetaEntry;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import space.Entry;
+import space.Transaction;
 import space.remote.VistaSpace;
 import vista.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.InetAddress;
+
 import javax.swing.*;
 import space.Entry;
 import space.remote.VistaSpace;
@@ -20,6 +27,7 @@ import vista.tuples.Entities;
 import vista.tuples.FrequencyMethod;
 import vista.tuples.UpdateMethod;
 import vista.object.Cell;
+import vista.test.star.MainSequenceEntry;
 import vista.object.*;
 import vista.tuples.*;
 
@@ -28,7 +36,7 @@ import vista.tuples.*;
 */
 public class VistaUI extends JFrame implements NucleusListener{
   /** Set to false to suppress debug/test activities */
-  private final static boolean DEBUG = false;
+  private final static boolean DEBUG = true;
 
   private final static String SPACEPLACE = "rmi://localhost/space";
   /** Space reference to bind to the Internet.
@@ -37,7 +45,7 @@ public class VistaUI extends JFrame implements NucleusListener{
 
    /** Default RMI port number for listening to look up requests.
    */
-   public final static Integer REGISTRY_PORT = new Integer(1099);
+   public final static Integer REGISTRY_PORT = new Integer(1098);
 
   // Generic date formatter
   private SimpleDateFormat formatter = new SimpleDateFormat ("hh:mm:ss a");
@@ -96,9 +104,10 @@ public class VistaUI extends JFrame implements NucleusListener{
   public VistaUI(String url) {
     super("Vista - Version 1.0");
   try{
-   
+	  System.out.println("Constructor VistaUI Begin ");
       vistaSpace = new VistaSpace(url,REGISTRY_PORT);
       VistaSpace.setListener(this);
+      System.out.println("Constructor VistaUI End ");
   }catch(Exception e){
   	System.out.println("The exception has occured");
   }
@@ -129,71 +138,107 @@ public class VistaUI extends JFrame implements NucleusListener{
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     setSize(400,525);
+    
+    System.out.println("DEBUG"+DEBUG);
+    
      if(DEBUG)
       test(this);
    
-     new Thread( new vista.test.MapUpdate(tabsPanel.getMapPanel( ),liveEntities,clidindex )).start( );
-
-    
-     new Thread( new vista.test.SpidsUpdate(tabsPanel.getSpidsPanel( ),liveEntities )).start( );
-
-    
-     new Thread( new vista.test.ClidsUpdate(tabsPanel.getClidsPanel( ),liveEntities )).start( );
-
-
-     new Thread( new vista.test.StatsUpdate(tabsPanel.getStatsPanel( ),liveEntities)).start( );
-
-     new Thread( new vista.test.GraveUpdate(tabsPanel.getGravePanel( ),deadEntities )).start( );
-   
-
-    // Set listener to capture cell drills
-    // Q: Why doesn't GC recycle this? A: CellDrill registers with MapPanel.
-     new vista.test.CellDrill(this, tabsPanel.getMapPanel( ) );
-     
-     
-     new ItemChangeListener(tabsPanel.getMapPanel());
- 
-     new UpdateListener(tabsPanel.getMapPanel());
-    
-     new ViewListener(tabsPanel.getMapPanel());
-    
-     new OrganizeListener(tabsPanel.getMapPanel());
+	/*
+	 * new Thread( new vista.test.MapUpdate(tabsPanel.getMapPanel(
+	 * ),liveEntities,clidindex )).start( );
+	 * 
+	 * 
+	 * new Thread( new vista.test.SpidsUpdate(tabsPanel.getSpidsPanel(
+	 * ),liveEntities )).start( );
+	 * 
+	 * 
+	 * new Thread( new vista.test.ClidsUpdate(tabsPanel.getClidsPanel(
+	 * ),liveEntities )).start( );
+	 * 
+	 * 
+	 * new Thread( new vista.test.StatsUpdate(tabsPanel.getStatsPanel(
+	 * ),liveEntities)).start( );
+	 * 
+	 * new Thread( new vista.test.GraveUpdate(tabsPanel.getGravePanel(
+	 * ),deadEntities )).start( );
+	 * 
+	 * 
+	 * // Set listener to capture cell drills // Q: Why doesn't GC recycle this? A:
+	 * CellDrill registers with MapPanel. new vista.test.CellDrill(this,
+	 * tabsPanel.getMapPanel( ) );
+	 * 
+	 * 
+	 * new ItemChangeListener(tabsPanel.getMapPanel());
+	 * 
+	 * new UpdateListener(tabsPanel.getMapPanel());
+	 * 
+	 * new ViewListener(tabsPanel.getMapPanel());
+	 * 
+	 * new OrganizeListener(tabsPanel.getMapPanel());
+	 */
 
   }
 
   /** Executes unit tests to see if every works as expected */
   private void test(JFrame frame) {
 
-    // Test the map update
-   new Thread( new vista.test.MapUpdate(tabsPanel.getMapPanel( ),liveEntities,clidindex )).start( );
+	  MainSequenceEntry mainSequenceEntry = new MainSequenceEntry("A");
+	  Transaction paramTransaction = new Transaction();
+	  InetAddress paramInetAddress;
+	  MetaEntry mentry;
+	  
+	try {
+		
+		paramInetAddress = InetAddress.getLocalHost();
+		mentry = new MetaEntry(mainSequenceEntry, paramTransaction, 999999,  paramInetAddress);
+		Entity entity = new vista.object.Entity(mentry);
+	
+		liveEntities.insert(entity);
+		
+		// Test the map update
+		   new Thread( new vista.test.MapUpdate(tabsPanel.getMapPanel( ),liveEntities,clidindex )).start( );
 
-    // Test the spids table update
-    new Thread( new vista.test.SpidsUpdate(tabsPanel.getSpidsPanel( ),liveEntities )).start( );
+		    // Test the spids table update
+		    new Thread( new vista.test.SpidsUpdate(tabsPanel.getSpidsPanel( ),liveEntities )).start( );
 
-    //  Test the clids table update
-    new Thread( new vista.test.ClidsUpdate(tabsPanel.getClidsPanel( ),liveEntities )).start( );
+		    //  Test the clids table update
+		    new Thread( new vista.test.ClidsUpdate(tabsPanel.getClidsPanel( ),liveEntities )).start( );
 
-//  Test the statistics table update
-    new Thread( new vista.test.StatsUpdate(tabsPanel.getStatsPanel( ),liveEntities)).start( );
+		//  Test the statistics table update
+		    new Thread( new vista.test.StatsUpdate(tabsPanel.getStatsPanel( ),liveEntities)).start( );
 
 
-//  Test the graveyard table update
-   new Thread( new vista.test.GraveUpdate(tabsPanel.getGravePanel( ),deadEntities )).start( );
-    // new vista.test.GraveUpdate(tabsPanel.getGravePanel( ),deadEntities );
+		//  Test the graveyard table update
+		   new Thread( new vista.test.GraveUpdate(tabsPanel.getGravePanel( ),deadEntities )).start( );
+		    // new vista.test.GraveUpdate(tabsPanel.getGravePanel( ),deadEntities );
 
-    // Set listener to capture cell drills
-    // Q: Why doesn't GC recycle this? A: CellDrill registers with MapPanel.
-    new vista.test.CellDrill(frame, tabsPanel.getMapPanel( ) );
-     
-     
-    new ItemChangeListener(tabsPanel.getMapPanel());
+		    // Set listener to capture cell drills
+		    // Q: Why doesn't GC recycle this? A: CellDrill registers with MapPanel.
+		    new vista.test.CellDrill(frame, tabsPanel.getMapPanel( ) );
+		     
+		     
+		    new ItemChangeListener(tabsPanel.getMapPanel());
 
-    new UpdateListener(tabsPanel.getMapPanel());
-    
-    new ViewListener(tabsPanel.getMapPanel());
-    
-    new OrganizeListener(tabsPanel.getMapPanel());
-  
+		    new UpdateListener(tabsPanel.getMapPanel());
+		    
+		    new ViewListener(tabsPanel.getMapPanel());
+		    
+		    new OrganizeListener(tabsPanel.getMapPanel());
+
+		
+		
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  
+	  
+	  
+	   
+	  
+	  
+      
 }
 
 /** Invoked on a nucleus action.
@@ -260,9 +305,9 @@ switch(action) {
     break;
 }
 long id = mentry.getId();
-  //System.out.println("the space expires"+spaceExpires);
- //System.out.println(" The mentry id is "+ id );
- //print(mentry,tmpl);
+ System.out.println("the space expires"+spaceExpires);
+ System.out.println(" The mentry id is "+ id );
+ print(mentry,tmpl);
 }
 
   /** Print out the statistics so far.
@@ -343,7 +388,10 @@ public static Integer getClid(Entry e){
       @param args Command line arguments.
   */
   public static void main(String[] args) throws Exception {
-    // Set the look and feel.
+	 System.setProperty("java.net.preferIPv4Stack" , "true");
+	 System.out.println("Begin of VistaUI main");  
+	  
+	// Set the look and feel.
     try {
       UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
     } catch(Exception lfe) {}
@@ -360,6 +408,8 @@ public static Integer getClid(Entry e){
 
     vistaUI.setVisible(true);
 
+    System.out.println("End of VistaUI main");
+    
  }
  public static DeadEntities getDeadEntities(){
 	  return deadEntities;

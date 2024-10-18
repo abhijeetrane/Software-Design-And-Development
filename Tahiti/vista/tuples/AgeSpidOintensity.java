@@ -27,6 +27,13 @@ public class AgeSpidOintensity implements UpdateMethod{
  	
  	}
     public Vector getLocators(){
+    	
+    	if(entities == null) {
+    		System.out.println("entities is null");    		
+    	}else {
+    		System.out.println("entities size is"+entities.getSize());
+    	}
+    	
     	synchronized(entities){
     	int i=0;
     	int sizeClid ,sizeEntities;

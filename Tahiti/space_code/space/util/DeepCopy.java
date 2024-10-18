@@ -1,38 +1,31 @@
 package space.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-// Referenced classes of package space.util:
-//            FastByteArrayOutputStream
-
-public class DeepCopy
-{
-
-    public DeepCopy()
-    {
-    }
-
-    public static Object copy(Object obj)
-    {
-        Object obj1 = null;
-        try
-        {
-            FastByteArrayOutputStream fastbytearrayoutputstream = new FastByteArrayOutputStream();
-            ObjectOutputStream objectoutputstream = new ObjectOutputStream(fastbytearrayoutputstream);
-            objectoutputstream.writeObject(obj);
-            objectoutputstream.flush();
-            objectoutputstream.close();
-            ObjectInputStream objectinputstream = new ObjectInputStream(fastbytearrayoutputstream.getInputStream());
-            obj1 = objectinputstream.readObject();
-        }
-        catch(IOException ioexception)
-        {
-            ioexception.printStackTrace();
-        }
-        catch(ClassNotFoundException classnotfoundexception)
-        {
-            classnotfoundexception.printStackTrace();
-        }
-        return obj1;
-    }
+public class DeepCopy {
+  public static Object copy(Object paramObject) {
+    Object object = null;
+    try {
+      FastByteArrayOutputStream fastByteArrayOutputStream = new FastByteArrayOutputStream();
+      ObjectOutputStream objectOutputStream = new ObjectOutputStream(fastByteArrayOutputStream);
+      objectOutputStream.writeObject(paramObject);
+      objectOutputStream.flush();
+      objectOutputStream.close();
+      ObjectInputStream objectInputStream = new ObjectInputStream(fastByteArrayOutputStream.getInputStream());
+      object = objectInputStream.readObject();
+    } catch (IOException iOException) {
+      iOException.printStackTrace();
+    } catch (ClassNotFoundException classNotFoundException) {
+      classNotFoundException.printStackTrace();
+    } 
+    return object;
+  }
 }
+
+
+/* Location:              E:\masters_projects\Tahiti\src\space.jar!\spac\\util\DeepCopy.class
+ * Java compiler version: 5 (49.0)
+ * JD-Core Version:       1.1.3
+ */

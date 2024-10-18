@@ -123,7 +123,9 @@ addAnchoredComponent(updateViewPanel,3,0,GriddedPanel.C_WEST);
 /** Updates the entity cell matrix with new information.
  @param method Update method. */
 public void update(UpdateMethod method) {
-emp.update(method);
+	System.out.println("MapPanel update Method Begin");
+    emp.update(method);
+    System.out.println("MapPanel update Method End");
 }
 
 /** Sets map listener to be invoked if user clicks a cell.

@@ -113,16 +113,38 @@ public class EntityMatrixPanel extends JScrollPane implements MapListener {
   /** Updates the cells.
       @param method Update method. */
   public void update(UpdateMethod method ) {
+	  
+	  if(this.locators == null) {
+	    	System.out.println("this.Locators is null");
+	  }else {
+	    	System.out.println("thisLocators size is "+this.locators.size());
+	  }  
+	  
+	  
     // Clear out the old ones so that panel is reset
     clearout(this.locators);
 
     // Get the new locators and map into matrix cells
     Vector locators = method.getLocators( );
+    
+    if(locators == null) {
+    	System.out.println("Locators is null");
+    }else {
+    	System.out.println("Locators size is "+locators.size());
+    }
+    
+    
 
-    Enumeration enum = locators.elements();
+    Enumeration enum2 = locators.elements();
 
-    while(enum.hasMoreElements( )) {
-      EntityLocator locator = (EntityLocator) enum.nextElement();
+    if(enum2 == null) {
+    	System.out.println("enum2 is null");
+    } 
+    
+    
+    
+    while(enum2.hasMoreElements( )) {
+      EntityLocator locator = (EntityLocator) enum2.nextElement();
 
       int row = locator.getRow( );
       int col = locator.getCol( );
@@ -155,10 +177,10 @@ public class EntityMatrixPanel extends JScrollPane implements MapListener {
     if(locators == null)
       return;
 
-    Enumeration enum = locators.elements();
+    Enumeration enum3 = locators.elements();
 
-    while(enum.hasMoreElements()) {
-      EntityLocator locator = (EntityLocator) enum.nextElement( );
+    while(enum3.hasMoreElements()) {
+      EntityLocator locator = (EntityLocator) enum3.nextElement( );
 
       int row = locator.getRow( );
       int col = locator.getCol( );

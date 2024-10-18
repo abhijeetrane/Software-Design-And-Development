@@ -1,74 +1,55 @@
 package space.remote;
 
-import java.util.LinkedList;
 import java.util.ListIterator;
-import space.nucleus.*;
+import space.nucleus.Logger;
+import space.nucleus.MetaEntry;
+import space.nucleus.Nucleus;
+import space.nucleus.NucleusListener;
 
-// Referenced classes of package space.remote:
-//            RemoteSpace
-
-public class VistaSpace extends RemoteSpace
-{
-
-    public VistaSpace()
-        throws Exception
-    {
-    }
-
-    public VistaSpace(String s)
-        throws Exception
-    {
-        super(s);
-    }
-
-    public VistaSpace(String s, Integer integer)
-        throws Exception
-    {
-        super(s, integer, null);
-    }
-
-    public VistaSpace(String s, Integer integer, Integer integer1)
-        throws Exception
-    {
-        super(s, integer, integer1);
-    }
-
-    public void dispose(long l)
-    {
-        LinkedList linkedlist = tuples;
-        JVM INSTR monitorenter ;
-        long l1;
-        ListIterator listiterator;
-        l1 = System.currentTimeMillis();
-        listiterator = tuples.listIterator(0);
-        MetaEntry metaentry;
-        do
-        {
-            if(!listiterator.hasNext())
-            {
-                break MISSING_BLOCK_LABEL_148;
-            }
-            metaentry = (MetaEntry)listiterator.next();
-        } while(metaentry.isevictable(l1) || metaentry.getId() != l);
-        listiterator.remove();
-        metaentry.setDisposed();
-        Logger.getInstance().write((new StringBuilder()).append("DISPOSE ").append(metaentry.getEntry().getClass().getName()).append(" spid ").append(metaentry.getId()).append(" size ").append(tuples.size()).toString());
-        return;
-        Exception exception;
-        exception;
-        throw exception;
-        Logger.getInstance().write((new StringBuilder()).append("DISPOSE failed spid ").append(l).append(" size ").append(tuples.size()).toString());
-        return;
-    }
-
-    public static void setListener(NucleusListener nucleuslistener, long l)
-    {
-        Nucleus.listener = nucleuslistener;
-        Nucleus.mask = l;
-    }
-
-    public static void setListener(NucleusListener nucleuslistener)
-    {
-        setListener(nucleuslistener, 255L);
-    }
+public class VistaSpace extends RemoteSpace {
+  public VistaSpace() throws Exception {}
+  
+  public VistaSpace(String paramString) throws Exception {
+    super(paramString);
+  }
+  
+  public VistaSpace(String paramString, Integer paramInteger) throws Exception {
+    super(paramString, paramInteger, (Integer)null);
+  }
+  
+  public VistaSpace(String paramString, Integer paramInteger1, Integer paramInteger2) throws Exception {
+    super(paramString, paramInteger1, paramInteger2);
+  }
+  
+  public void dispose(long paramLong) {
+    synchronized (this.tuples) {
+      long l = System.currentTimeMillis();
+      ListIterator<MetaEntry> listIterator = this.tuples.listIterator(0);
+      while (listIterator.hasNext()) {
+        MetaEntry metaEntry = listIterator.next();
+        if (!metaEntry.isevictable(l) && metaEntry.getId() == paramLong) {
+          listIterator.remove();
+          metaEntry.setDisposed();
+          Logger.getInstance().write("DISPOSE " + metaEntry.getEntry().getClass().getName() + " spid " + metaEntry.getId() + " size " + this.tuples.size());
+          return;
+        } 
+      } 
+    } 
+    Logger.getInstance().write("DISPOSE failed spid " + paramLong + " size " + this.tuples.size());
+  }
+  
+  public static void setListener(NucleusListener paramNucleusListener, long paramLong) {
+    Nucleus.listener = paramNucleusListener;
+    Nucleus.mask = paramLong;
+  }
+  
+  public static void setListener(NucleusListener paramNucleusListener) {
+    setListener(paramNucleusListener, 255L);
+  }
 }
+
+
+/* Location:              E:\masters_projects\Tahiti\src\space.jar!\space\remote\VistaSpace.class
+ * Java compiler version: 5 (49.0)
+ * JD-Core Version:       1.1.3
+ */

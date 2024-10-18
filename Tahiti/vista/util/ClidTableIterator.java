@@ -21,21 +21,21 @@ import vista.util.Clid;
 */
 public class ClidTableIterator {
   /** The Enumeration of the ClidTable's values (Clids). */
-  private Enumeration enum;
+  private Enumeration enum1;
 
   /** Constructor.
       This constructor builds an iterator over the values in the ClidTable.
    */
-  public ClidTableIterator(java.util.Enumeration enum) {
-    this.enum = enum;
+  public ClidTableIterator(java.util.Enumeration enum1) {
+    this.enum1 = enum1;
   }
 
   /** Returns the next Clid in the Enumeration of the ClidTable.
       Return the next Clid, or null if there are no more.
   */
   public vista.util.Clid next() {
-    if (enum.hasMoreElements()) {
-      return (vista.util.Clid)enum.nextElement();
+    if (enum1.hasMoreElements()) {
+      return (vista.util.Clid)enum1.nextElement();
     }
     return null;
   }

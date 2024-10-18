@@ -2,90 +2,67 @@ package space.remote;
 
 import java.net.InetAddress;
 import java.rmi.MarshalledObject;
-import space.*;
+import space.Entry;
+import space.Lease;
+import space.SpaceService;
+import space.Transaction;
 
-// Referenced classes of package space.remote:
-//            SpaceException, ProxyListener, RemoteSpaceService, RemoteEventListener
-
-public class MicroSpace
-    implements SpaceService
-{
-
-    private ProxyListener proxy;
-    private Integer rid;
-    private RemoteSpaceService spacesvc;
-    private InetAddress address;
-
-    public MicroSpace(RemoteSpaceService remotespaceservice)
-        throws Exception, SpaceException
-    {
-        if(remotespaceservice == null)
-        {
-            throw new SpaceException("Remote space service reference is null.");
-        } else
-        {
-            spacesvc = remotespaceservice;
-            address = InetAddress.getLocalHost();
-            return;
-        }
-    }
-
-    public Lease write(Entry entry, Transaction transaction, long l)
-        throws Exception
-    {
-        return spacesvc.write(entry, transaction, l, address);
-    }
-
-    public Entry take(Entry entry, Transaction transaction, long l)
-        throws Exception
-    {
-        return spacesvc.take(entry, transaction, l, address);
-    }
-
-    public Entry takeIfExists(Entry entry, Transaction transaction, long l)
-        throws Exception
-    {
-        return spacesvc.takeIfExists(entry, transaction, l, address);
-    }
-
-    public Entry read(Entry entry, Transaction transaction, long l)
-        throws Exception
-    {
-        return spacesvc.read(entry, transaction, l, address);
-    }
-
-    public Entry readIfExists(Entry entry, Transaction transaction, long l)
-        throws Exception
-    {
-        return spacesvc.readIfExists(entry, transaction, l, address);
-    }
-
-    public Entry snapshot(Entry entry)
-        throws Exception
-    {
-        return entry;
-    }
-
-    public void notify(Entry entry, Transaction transaction, RemoteEventListener remoteeventlistener, long l, MarshalledObject marshalledobject)
-        throws Exception
-    {
-        if(proxy == null)
-        {
-            proxy = new ProxyListener();
-            rid = spacesvc.register(InetAddress.getLocalHost().getHostName(), proxy);
-            if(rid == null)
-            {
-                throw new SpaceException("Nucleus was unable register listener.");
-            }
-        }
-        Integer integer = spacesvc.pin(rid, entry, address);
-        if(integer == null)
-        {
-            throw new SpaceException("Nucleus was unable to pin template.");
-        } else
-        {
-            proxy.add(integer, remoteeventlistener, marshalledobject);
-            return;
-        }
-    }
+public class MicroSpace implements SpaceService {
+  private ProxyListener proxy;
+  
+  private Integer rid;
+  
+  private RemoteSpaceService spacesvc;
+  
+  private InetAddress address;
+  
+  public MicroSpace(RemoteSpaceService paramRemoteSpaceService) throws Exception, SpaceException {
+    if (paramRemoteSpaceService == null)
+      throw new SpaceException("Remote space service reference is null."); 
+    this.spacesvc = paramRemoteSpaceService;
+    this.address = InetAddress.getLocalHost();
+  }
+  
+  public Lease write(Entry paramEntry, Transaction paramTransaction, long paramLong) throws Exception {
+    return this.spacesvc.write(paramEntry, paramTransaction, paramLong, this.address);
+  }
+  
+  public Entry take(Entry paramEntry, Transaction paramTransaction, long paramLong) throws Exception {
+    return this.spacesvc.take(paramEntry, paramTransaction, paramLong, this.address);
+  }
+  
+  public Entry takeIfExists(Entry paramEntry, Transaction paramTransaction, long paramLong) throws Exception {
+    return this.spacesvc.takeIfExists(paramEntry, paramTransaction, paramLong, this.address);
+  }
+  
+  public Entry read(Entry paramEntry, Transaction paramTransaction, long paramLong) throws Exception {
+    return this.spacesvc.read(paramEntry, paramTransaction, paramLong, this.address);
+  }
+  
+  public Entry readIfExists(Entry paramEntry, Transaction paramTransaction, long paramLong) throws Exception {
+    return this.spacesvc.readIfExists(paramEntry, paramTransaction, paramLong, this.address);
+  }
+  
+  public Entry snapshot(Entry paramEntry) throws Exception {
+    return paramEntry;
+  }
+  
+  public void notify(Entry paramEntry, Transaction paramTransaction, RemoteEventListener paramRemoteEventListener, long paramLong, MarshalledObject paramMarshalledObject) throws Exception {
+    if (this.proxy == null) {
+      this.proxy = new ProxyListener();
+      this.rid = this.spacesvc.register(InetAddress.getLocalHost().getHostName(), this.proxy);
+      if (this.rid == null)
+        throw new SpaceException("Nucleus was unable register listener."); 
+    } 
+    Integer integer = this.spacesvc.pin(this.rid, paramEntry, this.address);
+    if (integer == null)
+      throw new SpaceException("Nucleus was unable to pin template."); 
+    this.proxy.add(integer, paramRemoteEventListener, paramMarshalledObject);
+  }
 }
+
+
+/* Location:              E:\masters_projects\Tahiti\src\space.jar!\space\remote\MicroSpace.class
+ * Java compiler version: 5 (49.0)
+ * JD-Core Version:       1.1.3
+ */

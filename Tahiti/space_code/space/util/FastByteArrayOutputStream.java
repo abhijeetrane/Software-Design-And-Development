@@ -3,76 +3,65 @@ package space.util;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-// Referenced classes of package space.util:
-//            FastByteArrayInputStream
-
-public class FastByteArrayOutputStream extends OutputStream
-{
-
-    protected byte buf[];
-    protected int size;
-
-    public FastByteArrayOutputStream()
-    {
-        this(5120);
-    }
-
-    public FastByteArrayOutputStream(int i)
-    {
-        buf = null;
-        size = 0;
-        size = 0;
-        buf = new byte[i];
-    }
-
-    private void verifyBufferSize(int i)
-    {
-        if(i > buf.length)
-        {
-            byte abyte0[] = buf;
-            buf = new byte[Math.max(i, 2 * buf.length)];
-            System.arraycopy(abyte0, 0, buf, 0, abyte0.length);
-            abyte0 = null;
-        }
-    }
-
-    public int getSize()
-    {
-        return size;
-    }
-
-    public byte[] getByteArray()
-    {
-        return buf;
-    }
-
-    public final void write(byte abyte0[])
-    {
-        verifyBufferSize(size + abyte0.length);
-        System.arraycopy(abyte0, 0, buf, size, abyte0.length);
-        size += abyte0.length;
-    }
-
-    public final void write(byte abyte0[], int i, int j)
-    {
-        verifyBufferSize(size + j);
-        System.arraycopy(abyte0, i, buf, size, j);
-        size += j;
-    }
-
-    public final void write(int i)
-    {
-        verifyBufferSize(size + 1);
-        buf[size++] = (byte)i;
-    }
-
-    public void reset()
-    {
-        size = 0;
-    }
-
-    public InputStream getInputStream()
-    {
-        return new FastByteArrayInputStream(buf, size);
-    }
+public class FastByteArrayOutputStream extends OutputStream {
+  protected byte[] buf = null;
+  
+  protected int size = 0;
+  
+  public FastByteArrayOutputStream() {
+    this(5120);
+  }
+  
+  public FastByteArrayOutputStream(int paramInt) {
+    this.size = 0;
+    this.buf = new byte[paramInt];
+  }
+  
+  private void verifyBufferSize(int paramInt) {
+    if (paramInt > this.buf.length) {
+      byte[] arrayOfByte = this.buf;
+      this.buf = new byte[Math.max(paramInt, 2 * this.buf.length)];
+      System.arraycopy(arrayOfByte, 0, this.buf, 0, arrayOfByte.length);
+      arrayOfByte = null;
+    } 
+  }
+  
+  public int getSize() {
+    return this.size;
+  }
+  
+  public byte[] getByteArray() {
+    return this.buf;
+  }
+  
+  public final void write(byte[] paramArrayOfbyte) {
+    verifyBufferSize(this.size + paramArrayOfbyte.length);
+    System.arraycopy(paramArrayOfbyte, 0, this.buf, this.size, paramArrayOfbyte.length);
+    this.size += paramArrayOfbyte.length;
+  }
+  
+  public final void write(byte[] paramArrayOfbyte, int paramInt1, int paramInt2) {
+    verifyBufferSize(this.size + paramInt2);
+    System.arraycopy(paramArrayOfbyte, paramInt1, this.buf, this.size, paramInt2);
+    this.size += paramInt2;
+  }
+  
+  public final void write(int paramInt) {
+    verifyBufferSize(this.size + 1);
+    this.buf[this.size++] = (byte)paramInt;
+  }
+  
+  public void reset() {
+    this.size = 0;
+  }
+  
+  public InputStream getInputStream() {
+    return new FastByteArrayInputStream(this.buf, this.size);
+  }
 }
+
+
+/* Location:              E:\masters_projects\Tahiti\src\space.jar!\spac\\util\FastByteArrayOutputStream.class
+ * Java compiler version: 5 (49.0)
+ * JD-Core Version:       1.1.3
+ */
